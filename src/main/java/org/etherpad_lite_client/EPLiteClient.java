@@ -48,6 +48,7 @@ public class EPLiteClient {
      * padUrl
      */
     private String padUrl;
+    private String padPublicUrl;
 
     /**
      * Initializes a new org.etherpad_lite_client.EPLiteClient object. The default Etherpad Lite API version (in
@@ -72,6 +73,13 @@ public class EPLiteClient {
     public EPLiteClient(Vertx vertx, String url, String apiKey, String apiVersion, Boolean trustAll, final JsonObject config) {
         this.connection = new EPLiteConnection(vertx, url, apiKey, apiVersion, trustAll, config);
         this.padUrl = url;
+        this.padPublicUrl = url;
+    }
+
+    public void setPublicUrl(String publicUrl) {
+        if (publicUrl != null && !publicUrl.isEmpty()) {
+            this.padPublicUrl = publicUrl;
+        }
     }
 
     // Groups
@@ -498,6 +506,6 @@ public class EPLiteClient {
     }
 
     public String getPadUrl() {
-        return this.padUrl;
+        return this.padPublicUrl;
     }
 }
