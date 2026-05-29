@@ -151,7 +151,9 @@ public class EtherpadHelper extends MongoDbControllerHelper {
                 log.error("[Collaborative Editor] Error : Module property 'etherpad-domain' must be defined");
             }
 
-            clientByDomain.put(domain,  new EPLiteClient(vertx, etherpadUrl, etherpadApiKey, trustAll, config));
+            EPLiteClient client = new EPLiteClient(vertx, etherpadUrl, etherpadApiKey, trustAll, config);
+            client.setPublicUrl(config.getString("etherpad-public-url", null));
+            clientByDomain.put(domain, client);
         }
     }
 
