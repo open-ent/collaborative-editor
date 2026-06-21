@@ -1137,5 +1137,12 @@
   "workspace.tree.shared": "Shared with me",
   "write.file.error": "Your audio recording could not be saved",
   "yes": "Yes",
-  "zh_CN": "Mandarin (Chinese)"
+  "zh_CN": "Mandarin (Chinese)",
+  "collaborativeeditor.push-notif.share": "Pad: Sharing of a Pad",
+  "collaborativeeditor.share": "Sharing of a Pad",
+  "collaborativeeditor.unused": "Pad not modified",
+  "timeline.collaborativeeditor.has.shared": "shared the Pad with you",
+  "timeline.notify.unused.body": "You are invited to export your work and delete the PAD if you no longer need it.",
+  "timeline.notify.unused.title": "The PAD '",
+  "timeline.notify.unused.title.after": "' has not been modified since "
 }
