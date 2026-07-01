@@ -351,6 +351,14 @@ public class EtherpadHelper extends MongoDbControllerHelper {
 
                             final String language = Utils.getOrElse(I18n.acceptLanguage(request), "fr", false);
 
+                            // Sans ce garde-fou, une liste vide (utilisateur sans aucun éditeur)
+                            // ne déclenche aucun callback et la réponse n'est jamais rendue
+                            // (spinner infini côté UI). On répond immédiatement avec la liste vide.
+                            if (objects.isEmpty()) {
+                                Renders.renderJson(request, objects);
+                                return;
+                            }
+
                             for (int i=0;i<objects.size();i++) {
                                 final JsonObject jsonObject = objects.getJsonObject(i);
                                 final EPLiteClient client = clientByDomain.get(getAuthDomain(request));
@@ -548,14 +556,19 @@ public class EtherpadHelper extends MongoDbControllerHelper {
     private static String getAuthDomain(final String host) {
         String domain = "";
 
-        final List<String> levels = StringUtils.split(StringUtils.split(host, ":").get(0), "\\.");
+        // On travaille toujours sur le host SANS le port (ex. "localhost:8090" -> "localhost")
+        final String hostWithoutPort = StringUtils.split(host, ":").get(0);
+        final List<String> levels = StringUtils.split(hostWithoutPort, "\\.");
         if (levels.size() > 2) {
             for (int i=levels.size()-2;i<levels.size();i++) {
                 domain += levels.get(i) + ".";
             }
             domain = domain.substring(0, domain.length() - 1);
         } else {
-            domain = host;
+            // Bug historique : ici on renvoyait `host` (avec le port), incohérent avec la
+            // branche ci-dessus et avec la clé d'enregistrement du client etherpad
+            // (etherpad-domain, sans port) -> "no.pad.client" et listing bloqué en local.
+            domain = hostWithoutPort;
         }
 
         return domain;
